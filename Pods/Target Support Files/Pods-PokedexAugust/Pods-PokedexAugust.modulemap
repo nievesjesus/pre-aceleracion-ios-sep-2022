@@ -1,0 +1,6 @@
+framework module Pods_PokedexAugust {
+  umbrella header "Pods-PokedexAugust-umbrella.h"
+
+  export *
+  module * { export * }
+}
