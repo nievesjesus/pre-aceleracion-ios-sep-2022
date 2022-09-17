@@ -33,10 +33,20 @@ class PokemonListViewController: UIViewController {
         }
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !UserDefaults.standard.isUserLoggedIn {
+            let loginVC = LoginViewController()
+            loginVC.modalPresentationStyle = .fullScreen
+            self.present(loginVC, animated: false)
+        }
+    }
     private func setupView (){
         self.title = "Pokemon List"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logOut))
     }
     
     private func setupConstraints (){
@@ -48,13 +58,24 @@ class PokemonListViewController: UIViewController {
         ])
     }
     
+    @objc private func logOut() {
+        UserDefaults.standard.isUserLoggedIn = false
+        let loginVC = LoginViewController()
+        loginVC.modalPresentationStyle = .fullScreen
+        self.present(loginVC, animated: false)
+    }
+    
 }
 
 
 extension PokemonListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("seleccionado")
+        self.viewModel?.getPokemon(at: indexPath.row, onComplete: { pokemon in
+            let vc = PokemonDetailViewController()
+            vc.pokemonURL = pokemon.url
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
     
 }

@@ -24,4 +24,10 @@ class PokemonListViewModel {
             print(error)
         }
     }
+    
+    func getPokemon(at index: Int, onComplete: @escaping (PokemonDTO) -> Void) {
+        let pokemon = pokemons[index]
+        onComplete(pokemon)
+    }
+    
 }
